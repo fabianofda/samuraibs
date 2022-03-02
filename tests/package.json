@@ -1,0 +1,14 @@
+{
+  "name": "samuraibs-tests",
+  "version": "1.0.0",
+  "description": "Projeto de testes de aceitação 2e2 em cypress",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx cypress open"
+  },
+  "author": "Fabiano Dias",
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "^9.5.1"
+  }
+}
