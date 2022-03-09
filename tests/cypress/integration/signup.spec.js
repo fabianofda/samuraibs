@@ -19,9 +19,9 @@ describe('Cadastro', function () {
         it(`deve cadastrar com sucesso [exemplo "Intercept"]`, function () {
             cy.visit(`/signup`)
 
-            cy.get('input[placeholder="Nome"]').type(user.name)
-            cy.get('input[placeholder="E-mail"]').type(user.email)
-            cy.get('input[placeholder="Senha"]').type(user.password)
+            cy.get('input[placeholder^="Nome"]').type(user.name)
+            cy.get('input[placeholder$="email"]').type(user.email)
+            cy.get('input[placeholder*="senha"]').type(user.password)
 
             cy.intercept('POST', '/users', {
                 statusCode: 200
@@ -41,9 +41,9 @@ describe('Cadastro', function () {
         it(`deve cadastrar com sucesso [exemplo "PG"]`, function () {
             cy.visit(`/signup`)
 
-            cy.get('input[placeholder="Nome"]').type(user.name)
-            cy.get('input[placeholder="E-mail"]').type(user.email)
-            cy.get('input[placeholder="Senha"]').type(user.password)
+            cy.get('input[placeholder^="Nome"]').type(user.name)
+            cy.get('input[placeholder$="email"]').type(user.email)
+            cy.get('input[placeholder*="senha"]').type(user.password)
 
             cy.contains('button', 'Cadastrar').click()
 
@@ -65,9 +65,9 @@ describe('Cadastro', function () {
 
             cy.visit(`/signup`)
 
-            cy.get('input[placeholder="Nome"]').type(name)
-            cy.get('input[placeholder="E-mail"]').type(email)
-            cy.get('input[placeholder="Senha"]').type(password)
+            cy.get('input[placeholder^="Nome"]').type(name)
+            cy.get('input[placeholder$="email"]').type(email)
+            cy.get('input[placeholder*="senha"]').type(user.password)
 
             cy.contains('button', 'Cadastrar').click()
 
@@ -106,9 +106,9 @@ describe('Cadastro', function () {
         it(`não deve cadastrar o usuário`, function () {
             cy.visit(`/signup`)
 
-            cy.get('input[placeholder="Nome"]').type(user.name)
-            cy.get('input[placeholder="E-mail"]').type(user.email)
-            cy.get('input[placeholder="Senha"]').type(user.password)
+            cy.get('input[placeholder^="Nome"]').type(user.name)
+            cy.get('input[placeholder$="email"]').type(user.email)
+            cy.get('input[placeholder*="senha"]').type(user.password)
 
             cy.contains('button', 'Cadastrar').click()
 
