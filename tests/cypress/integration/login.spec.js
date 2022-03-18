@@ -1,84 +1,82 @@
 import loginPage from '../support/pages/login'
-import signupPage from '../support/pages/signup'
+import dashPage from '../support/pages/dash'
 
-context('Senha incorreta', function () {
-    const user = {
-        email: "wa@samuraibs.com",
-        password: "pwd"
-    }
+describe('Login', function () {
 
-    it(`deve exibir mensagem de alerta`, function () {
-        loginPage.go()
-        loginPage.form(user)
-        loginPage.submit()
-        loginPage.toast.shouldHaveText('Ocorreu um erro ao fazer login, verifique suas credenciais.')
+    context('Campos obrigatórios', function () {
+        const alertMessages = [
+            'E-mail é obrigatório',
+            'Senha é obrigatória'
+        ]
+
+        before(function () {
+            loginPage.go()
+            loginPage.submit()
+        })
+
+        alertMessages.forEach(function (alert) {
+            it('deve exibir ' + alert.toLowerCase(), function () {
+                loginPage.alertHaveText(alert)
+            })
+        })
+
     })
 
-})
+    context('Senha incorreta', function () {
+        const user = {
+            email: "wa@samuraibs.com",
+            password: "pwd",
+            msg: 'Ocorreu um erro ao fazer login, verifique suas credenciais.'
+        }
 
-context('Email no formato inválido', function () {
-    const user = {
-        email: "wa.samuraibs.com",
-        password: "pwd123"
-    }
+        it(`deve exibir ` + user.msg.toLowerCase(), function () {
+            loginPage.go()
+            loginPage.form(user)
+            loginPage.submit()
+            loginPage.toast.shouldHaveText(user.msg)
+        })
 
-    it(`deve exibir mensagem de alerta`, function () {
-        loginPage.go()
-        loginPage.form(user)
-        loginPage.submit()
-        loginPage.alertHaveText('Informe um email válido')
-    })
-})
-
-context('Campos obrigatórios', function () {
-    const alertMessages = [
-        'E-mail é obrigatório',
-        'Senha é obrigatória'
-    ]
-
-    before(function () {
-        loginPage.go()
-        loginPage.submit()
     })
 
-    alertMessages.forEach(function (alert) {
-        it('deve exibir ' + alert.toLowerCase(), function () {
-            loginPage.alertHaveText(alert)
+    context('Email no formato inválido', function () {
+        const user = {
+            email: "wa.samuraibs.com",
+            password: "pwd123",
+            msg: 'Informe um email válido'
+        }
+
+        it('deve exibir ' + user.msg.toLowerCase(), function () {
+            loginPage.go()
+            loginPage.form(user)
+            loginPage.submit()
+            loginPage.alertHaveText(user.msg)
         })
     })
 
-})
+    context('quando usuario é muito bom', function () {
 
-context('Login com sucesso', function () {
-    const user = {
-        name: 'lsmoreira',
-        email: 'lsmoreira@samuraibs.com',
-        password: 'pwd123'
-    }
+        const user = {
+            name: 'Luci Moreira',
+            email: 'lsmoreira@samuraibs.com',
+            password: 'pwd123',
+            is_provider: true
+        }
 
-    before(function () {
-        cy.visit(`/signup`)
+        before(function () {
+            cy.postUser(user)
+        })
 
-        cy.task('removeUsers', user.email)
-            .then(function (result) {
-                console.log(result)
-            })
+        it(`Login com sucesso`, function () {
 
-        signupPage.go()
-        signupPage.form(user)
-        signupPage.submit()
-        signupPage.toast.shouldHaveText('Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
-    })
+            loginPage.go()
+            loginPage.form(user)
+            loginPage.submit()
 
-    it(`deve ver a area logada`, function () {
+            dashPage.header.userLoggedIn(user.name)
 
-        loginPage.go()
-        loginPage.form(user)
-        loginPage.submit()
-
-        cy.contains('span', 'Bem-vindo,')
-            .should('be.visible')
+        })
 
     })
 
 })
+
