@@ -22,18 +22,29 @@ describe('Login', function () {
 
     })
 
-    context('Senha incorreta', function () {
-        const user = {
+    context.only('quando usuario eh bom mais a senha esta incorreta', function () {
+        let user = {
+            name: 'welton andrade',
             email: "wa@samuraibs.com",
-            password: "pwd",
-            msg: 'Ocorreu um erro ao fazer login, verifique suas credenciais.'
+            password: "pwd123",
+            is_provider: true
         }
 
-        it(`deve exibir ` + user.msg.toLowerCase(), function () {
+        before(function () {
+            cy.postUser(user)
+                .then(function () {
+                    user.password = "abc123"
+                })
+
+        })
+
+        it('deve notificar erro de credenciais ', function () {
             loginPage.go()
             loginPage.form(user)
             loginPage.submit()
-            loginPage.toast.shouldHaveText(user.msg)
+
+            const message = 'Ocorreu um erro ao fazer login, verifique suas credenciais.'
+            loginPage.toast.shouldHaveText(message)
         })
 
     })
