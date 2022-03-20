@@ -22,7 +22,7 @@ describe('Login', function () {
 
     })
 
-    context.only('quando usuario eh bom mais a senha esta incorreta', function () {
+    context('quando usuario eh bom mais a senha esta incorreta', function () {
         let user = {
             name: 'welton andrade',
             email: "wa@samuraibs.com",
@@ -49,19 +49,32 @@ describe('Login', function () {
 
     })
 
-    context('Email no formato inválido', function () {
-        const user = {
-            email: "wa.samuraibs.com",
-            password: "pwd123",
-            msg: 'Informe um email válido'
-        }
+    context('quando o formato do email é inválido', function () {
+        
+        const emails = [
+            'gmail.com',
+            '@yahoo.com',
+            '@',
+            'fabiano',
+            '123456',
+            'ábcdefg',
+            '!@#$$%ˆ'
+        ]
 
-        it('deve exibir ' + user.msg.toLowerCase(), function () {
+        before(function () {
             loginPage.go()
-            loginPage.form(user)
-            loginPage.submit()
-            loginPage.alertHaveText(user.msg)
         })
+
+        emails.forEach(function (email) {
+            it('nao deve logar com o email: ' + email.toLowerCase(), function () {
+                const user = { email: email, password: 'pwd123' }
+
+                loginPage.form(user)
+                loginPage.submit()
+                loginPage.alertHaveText('Informe um email válido')
+            })
+        })
+
     })
 
     context('quando usuario é muito bom', function () {

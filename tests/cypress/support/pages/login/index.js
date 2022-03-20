@@ -1,5 +1,4 @@
 import { el } from './elements'
-
 import toast from '../../components/toast'
 
 class LoginPage {
@@ -10,8 +9,11 @@ class LoginPage {
     }
 
     form(user) {
-        cy.get(el.email).type(user.email)
-        cy.get(el.password).type(user.password)
+        cy.get(el.email).clear()
+            .type(user.email)
+
+        cy.get(el.password).clear()
+            .type(user.password)
     }
 
     go() {
@@ -22,8 +24,8 @@ class LoginPage {
         cy.contains(el.signIn).click()
     }
 
-    alertHaveText(expectText) {
-        cy.contains('.alert-error', expectText)
+    alertHaveText(expectedText) {
+        cy.contains(el.alertError, expectedText)
             .should('be.visible')
     }
 
