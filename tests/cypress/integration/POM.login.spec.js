@@ -3,7 +3,7 @@ import dashPage from '../support/pages/dash'
 
 describe('Login', function () {
 
-    context('Campos obrigatórios', function () {
+    context('quando nao preencho nenhum dos campo', function () {
         const alertMessages = [
             'E-mail é obrigatório',
             'Senha é obrigatória'
@@ -16,7 +16,7 @@ describe('Login', function () {
 
         alertMessages.forEach(function (alert) {
             it('deve exibir ' + alert.toLowerCase(), function () {
-                loginPage.alertHaveText(alert)
+                loginPage.alert.haveText(alert)
             })
         })
 
@@ -50,7 +50,7 @@ describe('Login', function () {
     })
 
     context('quando o formato do email é inválido', function () {
-        
+
         const emails = [
             'gmail.com',
             '@yahoo.com',
@@ -58,7 +58,7 @@ describe('Login', function () {
             'fabiano',
             '123456',
             'ábcdefg',
-            '!@#$$%ˆ'
+            '!@#$$%'
         ]
 
         before(function () {
@@ -71,7 +71,7 @@ describe('Login', function () {
 
                 loginPage.form(user)
                 loginPage.submit()
-                loginPage.alertHaveText('Informe um email válido')
+                loginPage.alert.haveText('Informe um email válido')
             })
         })
 
@@ -103,4 +103,3 @@ describe('Login', function () {
     })
 
 })
-
