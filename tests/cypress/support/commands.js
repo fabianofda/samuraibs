@@ -26,7 +26,7 @@
 
 Cypress.Commands.add('postUser', function (user) {
 
-    cy.task('removeUsers', user.email)
+    cy.task('removeUser', user.email)
         .then(function (result) {
             console.log(result)
         })
