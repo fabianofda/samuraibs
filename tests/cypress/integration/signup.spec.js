@@ -1,122 +1,94 @@
-import faker from '@faker-js/faker'
+import signupPage from '../support/pages/signup'
 
 describe('Cadastro', function () {
+    before(function () {
+        cy.fixture('signup').then(function (signup) {
+            this.success = signup.success
+            this.email_dup = signup.email_dup
+            this.email_inv = signup.email_inv
+            this.short_password = signup.short_password
+        })
+    })
 
     context('Quando usuario é novo', function () {
-        const user = {
-            name: "fabiano dias",
-            email: "fabianofda@samuraibs.com",
-            password: "pwd123"
-        }
 
         before(function () {
-            cy.task('removeUsers', user.email)
+            cy.task('removeUsers', this.success.email)
                 .then(function (result) {
                     console.log(result)
                 })
         })
 
-        it(`deve cadastrar com sucesso [exemplo "Intercept"]`, function () {
-            cy.visit(`/signup`)
-
-            cy.get('input[placeholder^="Nome"]').type(user.name)
-            cy.get('input[placeholder$="email"]').type(user.email)
-            cy.get('input[placeholder*="senha"]').type(user.password)
-
-            cy.intercept('POST', '/users', {
-                statusCode: 200
-            }).as('postUser')
-
-            cy.contains('button', 'Cadastrar').click()
-
-            cy.wait('@postUser')
-
-            cy.get('.toast')
-                .should('be.visible')
-                .find('p')
-                .should('have.text', 'Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
-
+        it(`deve cadastrar com sucesso`, function () {
+            signupPage.go()
+            signupPage.form(this.success)
+            signupPage.submit()
+            signupPage.toast.shouldHaveText('Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
         })
-
-        it(`deve cadastrar com sucesso [exemplo "PG"]`, function () {
-            cy.visit(`/signup`)
-
-            cy.get('input[placeholder^="Nome"]').type(user.name)
-            cy.get('input[placeholder$="email"]').type(user.email)
-            cy.get('input[placeholder*="senha"]').type(user.password)
-
-            cy.contains('button', 'Cadastrar').click()
-
-            cy.get('.toast')
-                .should('be.visible')
-                .find('p')
-                .should('have.text', 'Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
-
-        })
-
-        it(`deve cadastrar com sucesso [exemplo "Faker"]`, function () {
-
-            var firstName = faker.name.firstName()
-            var lastName = faker.name.lastName()
-
-            const name = `${firstName} ${lastName}`
-            const email = faker.internet.email(firstName)
-            const password = "pwd123"
-
-            cy.visit(`/signup`)
-
-            cy.get('input[placeholder^="Nome"]').type(name)
-            cy.get('input[placeholder$="email"]').type(email)
-            cy.get('input[placeholder*="senha"]').type(user.password)
-
-            cy.contains('button', 'Cadastrar').click()
-
-            cy.get('.toast')
-                .should('be.visible')
-                .find('p')
-                .should('have.text', 'Agora você se tornou um(a) Samurai, faça seu login para ver seus agendamentos!')
-
-        })
-
     })
 
     context('Quando email ja existe', function () {
-        const user = {
-            name: 'luciana moreira',
-            email: 'lsmoreira@samuraibs.com',
-            password: 'pwd123',
-            is_provider: true
-        }
 
         before(function () {
-            cy.task('removeUsers', user.email)
-                .then(function (result) {
-                    console.log(result)
-                })
-
-            cy.request(
-                'POST',
-                'http://localhost:3333/users',
-                user
-            ).then(function (response) {
-                expect(response.status).to.eq(200)
-            })
+            cy.postUser(this.email_dup)
         })
 
         it(`não deve cadastrar o usuário`, function () {
-            cy.visit(`/signup`)
+            signupPage.go()
+            signupPage.form(this.email_dup)
+            signupPage.submit()
+            signupPage.toast.shouldHaveText('Email já cadastrado para outro usuário.')
+        })
+    })
 
-            cy.get('input[placeholder^="Nome"]').type(user.name)
-            cy.get('input[placeholder$="email"]').type(user.email)
-            cy.get('input[placeholder*="senha"]').type(user.password)
+    context('Quando o email é invalido', function () {
 
-            cy.contains('button', 'Cadastrar').click()
+        it(`deve exibir mensagem de alerta`, function () {
+            signupPage.go()
+            signupPage.form(this.email_inv)
+            signupPage.submit()
+            signupPage.alert.haveText('Informe um email válido')
+        })
+    })
 
-            cy.get('.toast')
-                .should('be.visible')
-                .find('p')
-                .should('have.text', 'Email já cadastrado para outro usuário.')
+    context('Quando a senha é muito curta', function () {
+
+        const passwords = ['1', '2a', '3ab', '4abc', '5432d']
+
+        passwords.forEach(function (p) {
+
+            it('nao deve cadastrar a senha: ' + p, function () {
+
+                this.short_password.password = p
+
+                signupPage.go()
+                signupPage.form(this.short_password)
+                signupPage.submit()
+            })
         })
 
+        afterEach(function () {
+            signupPage.alert.haveText('Pelo menos 6 caracteres')
+        })
+    })
+
+    context('quando não preencho nenhum dos campos', function () {
+
+        const alertMessages = [
+            'Nome é obrigatório',
+            'E-mail é obrigatório',
+            'Senha é obrigatória'
+        ]
+
+        before(function () {
+            signupPage.go()
+            signupPage.submit()
+        })
+
+        alertMessages.forEach(function (alert) {
+            it('deve exibir ' + alert.toLowerCase(), function () {
+                signupPage.alert.haveText(alert)
+            })
+        })
     })
 })

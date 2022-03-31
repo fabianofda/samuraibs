@@ -99,7 +99,5 @@ describe('Login', function () {
             dashPage.header.userLoggedIn(user.name)
 
         })
-
     })
-
 })

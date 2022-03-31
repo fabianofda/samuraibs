@@ -1,4 +1,4 @@
-import signupPage from '../support/pages/signup'
+import signupPage from '../../support/pages/signup'
 
 describe('Cadastro', function () {
 

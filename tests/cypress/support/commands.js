@@ -37,7 +37,6 @@ Cypress.Commands.add('postUser', function (user) {
         user
     ).then(function (response) {
         expect(response.status).to.eq(200)
-
     })
 })
 
@@ -55,7 +54,6 @@ Cypress.Commands.add('recoveryPass', function (email) {
             .then(function (result) {
                 Cypress.env('recoveryToken', result.token)
             })
-
     })
 })
 
