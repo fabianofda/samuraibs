@@ -5,3 +5,6 @@
 tests/.DS_Store
 .DS_Store
 /tests/cypress/integration/exemplos
+tests/cypress/integration/exemplos/FIX.signup.spec.js
+tests/cypress/integration/exemplos/POM.signup.spec.js
+.gitignore
