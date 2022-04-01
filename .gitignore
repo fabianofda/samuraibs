@@ -4,4 +4,4 @@
 /tests/yarn.lock
 tests/.DS_Store
 .DS_Store
-/exemplos
+/tests/cypress/integration/exemplos
