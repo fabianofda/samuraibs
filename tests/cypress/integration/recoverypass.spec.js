@@ -25,7 +25,7 @@ describe('resgate de senha', function () {
         })
     })
 
-    context.only('quando o usuario solicita o resgate', function () {
+    context('quando o usuario solicita o resgate', function () {
         before(function () {
             cy.postUser(this.data)
             cy.recoveryPass(this.data.email)

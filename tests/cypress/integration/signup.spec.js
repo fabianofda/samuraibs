@@ -13,7 +13,7 @@ describe('Cadastro', function () {
     context('Quando usuario é novo', function () {
 
         before(function () {
-            cy.task('removeUsers', this.success.email)
+            cy.task('removeUser', this.success.email)
                 .then(function (result) {
                     console.log(result)
                 })
