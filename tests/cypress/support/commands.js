@@ -26,6 +26,19 @@
 
 import moment from 'moment'
 import { apiServer } from '../../cypress.json'
+import dashPage from './pages/dash'
+import loginPage from './pages/login'
+
+
+Cypress.Commands.add('uiLogin', function (user) {
+
+    loginPage.go()
+    loginPage.form(user)
+    loginPage.submit()
+
+    dashPage.header.userLoggedIn(user.name)
+
+})
 
 Cypress.Commands.add('postUser', function (user) {
 
