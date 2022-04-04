@@ -14,6 +14,21 @@ class DashPage {
     }
 
     selectDay(day) {
+
+        let today = new Date()
+        let lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0)
+
+        if (today.getDate() === lastDayOfMonth.getDate()) {
+            cy.log('e o ultimo dia do mes?')
+
+            cy.get(el.nextMonthButton)
+                .should('be.visible')
+                .click()
+        } else {
+            cy.log('nao e o ultimo dia do mes?')
+        }
+
+
         const target = new RegExp('^' + day + '$', 'g')
 
         cy.contains(el.boxDay, target)
