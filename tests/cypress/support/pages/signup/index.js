@@ -18,6 +18,8 @@ class SignupPage {
 
     go() {
         cy.visit(`/signup`)
+
+        cy.contains(el.title).should('be.visible')
     }
 
     submit() {

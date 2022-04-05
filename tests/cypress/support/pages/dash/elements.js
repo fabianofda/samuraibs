@@ -1,5 +1,6 @@
 exports.el = {
 
+    title: ('h1', 'Recuperar senha'),
     calendar: '.DayPicker',
     boxDay: '.DayPicker-Day--available',
     boxName: 'div',
