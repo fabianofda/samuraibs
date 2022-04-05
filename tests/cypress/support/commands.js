@@ -29,7 +29,6 @@ import { apiServer } from '../../cypress.json'
 import dashPage from './pages/dash'
 import loginPage from './pages/login'
 
-
 Cypress.Commands.add('uiLogin', function (user) {
 
     loginPage.go()
@@ -37,7 +36,6 @@ Cypress.Commands.add('uiLogin', function (user) {
     loginPage.submit()
 
     dashPage.header.userLoggedIn(user.name)
-
 })
 
 Cypress.Commands.add('postUser', function (user) {
@@ -76,13 +74,12 @@ Cypress.Commands.add('recoveryPass', function (email) {
 Cypress.Commands.add('createAppointment', function (hour) {
 
     let now = new Date()
-    now.setDate(now.getDate() + 1)
+    now.setDate(now.getDate() + 30)
 
-    Cypress.env('appointmentDay', now.getDate())
-    //cy.log(now.getDate())
+    Cypress.env('appointmentDate', now)
 
     const date = moment(now).format(`YYYY-MM-DD ${hour}:00`)
-    //cy.log('date: ' + day)
+   
 
     const payload = {
         provider_id: Cypress.env('providerId'),
@@ -118,7 +115,6 @@ Cypress.Commands.add('setProviderId', function (providerEmail) {
             if (provider.email === providerEmail) {
                 Cypress.env('providerId', provider.id)
             }
-
         })
     })
 })

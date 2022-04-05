@@ -4,6 +4,7 @@ exports.el = {
     boxDay: '.DayPicker-Day--available',
     boxName: 'div',
     boxHour: 'span[class=appointment]',
-    nextMonthButton: '.DayPicker-NavButton--next'
+    nextMonthButton: '.DayPicker-NavButton--next',
+    monthYearName: '.DayPicker-Caption'
 
 }
