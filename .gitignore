@@ -8,3 +8,5 @@ tests/.DS_Store
 tests/cypress/integration/exemplos/FIX.signup.spec.js
 tests/cypress/integration/exemplos/POM.signup.spec.js
 .gitignore
+tests/cypress/screenshots
+tests/cypress/videos
